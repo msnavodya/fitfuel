@@ -2,19 +2,29 @@ import React from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert, Button } from 'react-native';
 import { useCart, useCartDispatch, cartTotal } from '../context/CartContext';
 import axios from 'axios';
-import { Linking } from 'react-native';
+import { Linking, ActivityIndicator } from 'react-native';
+import { useAuth } from '../context/AuthContext';
+import { createOrder } from '../services/orderService';
 
 export default function CartScreen() {
   const { items } = useCart();
   const dispatch = useCartDispatch();
+  const { user } = useAuth();
+  const [processing, setProcessing] = React.useState(false);
 
   const onCheckout = async () => {
+    if (!items.length) return;
+    setProcessing(true);
     try {
-      const resp = await axios.post('http://localhost:4242/create-checkout-session', { items });
+      const total = cartTotal(items);
+      const orderId = await createOrder(user?.uid, items, total);
+      const resp = await axios.post('http://localhost:4242/create-checkout-session', { items, orderId });
       const { url } = resp.data;
       if (url) Linking.openURL(url);
     } catch (err) {
       Alert.alert('Checkout error', err.message || 'Unable to create checkout session');
+    } finally {
+      setProcessing(false);
     }
   };
 
@@ -37,7 +47,11 @@ export default function CartScreen() {
       />
       <View style={styles.footer}>
         <Text style={styles.total}>Total: ${cartTotal(items)}</Text>
-        <Button title="Checkout" onPress={onCheckout} disabled={!items.length} />
+        {processing ? (
+          <ActivityIndicator />
+        ) : (
+          <Button title="Checkout" onPress={onCheckout} disabled={!items.length} />
+        )}
       </View>
     </View>
   );

@@ -10,6 +10,7 @@ app.use(express.json());
 app.post('/create-checkout-session', async (req, res) => {
   const { items } = req.body;
   try {
+    const orderId = req.body.orderId || null;
     const line_items = (items || []).map(i => ({
       price_data: {
         currency: 'usd',
@@ -22,6 +23,7 @@ app.post('/create-checkout-session', async (req, res) => {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items,
+      metadata: orderId ? { orderId } : {},
       mode: 'payment',
       success_url: (process.env.DOMAIN || 'http://localhost:3000') + '/success',
       cancel_url: (process.env.DOMAIN || 'http://localhost:3000') + '/cancel'
