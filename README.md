@@ -72,3 +72,9 @@ Google Sign-In (Expo + Firebase)
 
 4. For Expo dev on a real device, configure the OAuth redirect URI in Google Cloud Console as described in the Expo Auth Session docs.
 
+Stripe Webhooks
+
+1. In the Stripe Dashboard, under Developers → Webhooks, add an endpoint pointing to `https://<your-domain>/server/webhook` or `http://<your-ip>:4242/webhook` for local testing (use `stripe-cli` for local testing).
+2. Copy the webhook signing secret into `server/.env` as `STRIPE_WEBHOOK_SECRET`.
+
+

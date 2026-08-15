@@ -7,6 +7,34 @@ const cors = require('cors');
 app.use(cors());
 app.use(express.json());
 
+// Stripe webhook endpoint needs the raw body to validate signature
+const bodyParser = require('body-parser');
+
+app.post('/webhook', bodyParser.raw({ type: 'application/json' }), (req, res) => {
+  const sig = req.headers['stripe-signature'];
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  if (!webhookSecret) {
+    console.warn('No STRIPE_WEBHOOK_SECRET configured; cannot verify webhook signature');
+    return res.status(400).send('Webhook secret not configured');
+  }
+  let event;
+  try {
+    event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
+  } catch (err) {
+    console.error('Webhook signature verification failed.', err.message);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+
+  // Handle the checkout.session.completed event
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object;
+    console.log('Checkout session completed:', session.id, 'metadata:', session.metadata);
+    // TODO: update order status in DB using session.metadata.orderId
+  }
+
+  res.json({ received: true });
+});
+
 app.post('/create-checkout-session', async (req, res) => {
   const { items } = req.body;
   try {
