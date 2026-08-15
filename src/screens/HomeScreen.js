@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, FlatList, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { Colors, Spacing, Typography } from '../theme';
+import Header from '../components/Header';
 
 const SAMPLE_PRODUCTS = [
   { id: '1', name: 'Protein Bowl', price: '$9.99', image: 'https://images.unsplash.com/photo-1604908812557-9b5a7f3a8f0a' },
@@ -11,7 +12,8 @@ const SAMPLE_PRODUCTS = [
 export default function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      <Text style={[styles.title, Typography.h1]}>FitFuel</Text>
+      <Header navigation={navigation} />
+      <Text style={[styles.title, Typography.h1]}>Discover</Text>
       <FlatList
         data={SAMPLE_PRODUCTS}
         keyExtractor={(item) => item.id}
