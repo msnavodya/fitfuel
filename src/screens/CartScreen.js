@@ -5,6 +5,7 @@ import axios from 'axios';
 import { Linking, ActivityIndicator } from 'react-native';
 import { useAuth } from '../context/AuthContext';
 import { createOrder } from '../services/orderService';
+import { SERVER_URL } from '../config/config';
 
 export default function CartScreen() {
   const { items } = useCart();
@@ -18,7 +19,7 @@ export default function CartScreen() {
     try {
       const total = cartTotal(items);
       const orderId = await createOrder(user?.uid, items, total);
-      const resp = await axios.post('http://localhost:4242/create-checkout-session', { items, orderId });
+      const resp = await axios.post(`${SERVER_URL}/create-checkout-session`, { items, orderId });
       const { url } = resp.data;
       if (url) Linking.openURL(url);
     } catch (err) {

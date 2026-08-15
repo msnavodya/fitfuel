@@ -6,7 +6,10 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "start:server": "node server/server.js",
+    "start:app": "expo start",
+    "dev": "concurrently \"npm run start:server\" \"npm run start:app\""
   },
   "dependencies": {
     "expo": "~48.0.0",
@@ -20,6 +23,7 @@
     "axios": "^1.4.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "concurrently": "^8.2.0"
   }
 }
