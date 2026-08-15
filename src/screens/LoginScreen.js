@@ -15,10 +15,11 @@ export default function LoginScreen({ navigation }) {
 
   // Google auth request (replace client IDs with your own)
   const [request, response, promptAsync] = Google.useAuthRequest({
-    expoClientId: process.env.EXPO_CLIENT_ID || '',
-    iosClientId: process.env.IOS_CLIENT_ID || '',
-    androidClientId: process.env.ANDROID_CLIENT_ID || '',
-    webClientId: process.env.WEB_CLIENT_ID || ''
+    // values are generated from .env to src/config/env.js by running `node scripts/load-env.js`
+    expoClientId: require('../config/env').EXPO_CLIENT_ID || '',
+    iosClientId: require('../config/env').IOS_CLIENT_ID || '',
+    androidClientId: require('../config/env').ANDROID_CLIENT_ID || '',
+    webClientId: require('../config/env').WEB_CLIENT_ID || ''
   });
 
   useEffect(() => {

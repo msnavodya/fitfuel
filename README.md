@@ -1,3 +1,44 @@
+# FitFuel (Expo + React Native)
+
+Quickstart: run the app locally with Google Sign-In and Stripe (dev).
+
+1) Copy environment templates and fill values:
+
+```bash
+cp .env.example .env
+cp server/.env.example server/.env
+# Edit both .env files and fill Firebase config, Expo Google client IDs, and Stripe keys
+```
+
+2) Generate runtime env file used by the app:
+
+```bash
+node scripts/load-env.js
+```
+
+3) Install dependencies (if not already):
+
+```bash
+npm install
+cd server && npm install
+```
+
+4) Run both server and Expo app together:
+
+```bash
+npm run dev
+# or run server and app separately:
+# cd server && npm run start
+# npm run start:app
+```
+
+Notes:
+- For Google Sign-In (Expo): create OAuth client IDs in Google Cloud Console for Web, Android, and iOS. Paste the client IDs into `.env` (`EXPO_CLIENT_ID`, `ANDROID_CLIENT_ID`, `IOS_CLIENT_ID`, `WEB_CLIENT_ID`). Then re-run `node scripts/load-env.js`.
+- For Firebase: create a web app in your Firebase project and copy the config values into `.env` (see `.env.example`).
+- For Stripe: put your `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET` into `server/.env`. Use the `stripe-cli` (`stripe listen --forward-to localhost:4242/webhook`) to forward webhooks during local development.
+- The generated `src/config/env.js` is gitignored. Do not commit secrets.
+
+If you want, I can: generate the `src/config/env.js` now (if you provide filled `.env`), commit outstanding changes, and run the dev servers for you.
 # FitFuel (Starter)
 
 Minimal starter scaffold for the FitFuel mobile app (Expo + React Native).
