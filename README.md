@@ -36,6 +36,16 @@ Notes:
 - For Google Sign-In (Expo): create OAuth client IDs in Google Cloud Console for Web, Android, and iOS. Paste the client IDs into `.env` (`EXPO_CLIENT_ID`, `ANDROID_CLIENT_ID`, `IOS_CLIENT_ID`, `WEB_CLIENT_ID`). Then re-run `node scripts/load-env.js`.
 - For Firebase: create a web app in your Firebase project and copy the config values into `.env` (see `.env.example`).
 - For Stripe: put your `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET` into `server/.env`. Use the `stripe-cli` (`stripe listen --forward-to localhost:4242/webhook`) to forward webhooks during local development.
+- For Stripe: put your `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET` into `server/.env` and (for webhooks) use `stripe-cli` to forward webhooks during local development. Example:
+
+```bash
+# install stripe-cli (if not already)
+# https://stripe.com/docs/stripe-cli
+stripe login
+stripe listen --forward-to localhost:4242/webhook
+```
+
+- Health check: the server exposes `GET /health` to confirm it's running.
 - The generated `src/config/env.js` is gitignored. Do not commit secrets.
 
 If you want, I can: generate the `src/config/env.js` now (if you provide filled `.env`), commit outstanding changes, and run the dev servers for you.
