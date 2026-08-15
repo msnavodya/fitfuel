@@ -4,3 +4,5 @@ node_modules/
 .vscode/
 *.log
 .env
+server/.env
+src/config/env.js
